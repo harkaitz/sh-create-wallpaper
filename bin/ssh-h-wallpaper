@@ -1,0 +1,36 @@
+#!/bin/sh -e
+##:
+#h: Usage: ssh-h-wallpaper SSH,...
+#h:
+#h: Create custom wallpapers with create-wallpaper(1) for the machines
+#h: and upload to the computers.
+#h:
+#h: (i)  Only works for MS Windows using Busybox shell.
+#h: (ii) Requires https://github.com/harkaitz/sh-ssh-helpers.
+##:
+. ssh-h-list
+. create-wallpaper
+ssh_h_wallpaper() {
+    local m= d="${SSH_H_WALLPAPER_DIRECTORY}" i t="${TEMP:-/tmp}"
+    for m in $(ssh_h_list "$@"); do
+        echo "== ${m}"
+        if test -f "${d}/${m}.jpg"; then
+            i="${d}/${m}.jpg"
+        else
+            i=""
+        fi
+        create_wallpaper -t "${m}" ${i:+ -i "${i}" } "${t}"/wallpaper.png
+        scp "${t}"/wallpaper.png "${m}":"wallpaper.png"
+        ssh "${m}" '
+            reg add "HKEY_CURRENT_USER\\Control Panel\\Desktop" /v Wallpaper /t REG_SZ /d  ~/wallpaper.png /f
+            RUNDLL32.EXE USER32.DLL,UpdatePerUserSystemParameters ,1 ,True
+        '
+    done
+}
+## -------------------------------------------------------------------
+if test @"$(basename "$0")" = @"ssh-h-wallpaper";then
+    case "${1}" in
+        ''|-h|--help) sed -n 's/^ *#h: \{0,1\}//p' "$0" ;;
+        *)            ssh_h_wallpaper "$@"; exit 0;;
+    esac
+fi

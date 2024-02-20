@@ -1,0 +1,56 @@
+#!/bin/sh -e
+##:
+#h: Usage: create-wallpaper -V | [-i FACEIMG][-t HOSTNAME] OFILE
+#h:
+#h: Create a custom wallpaper for a machine using ImageMagick(1). The
+#h: wallpaper is gray with the HOSTNAME at top right and an optional
+#h: image (logo) below.
+##:
+create_wallpaper() {
+    local OPTIND optopt ofile= faceimg=
+    
+    ## Parse command line arguments.
+    while getopts "Vi:t:" optopt; do
+        case $optopt in
+            V)  create_wallpaper_show_variables; return 0;;
+            i)  faceimg="${OPTARG}";;
+            t)  local WALLPAPER_TEXT="${OPTARG}";;
+            \?) return 1;;
+        esac
+    done
+    shift $(( $OPTIND - 1 ))
+    ofile="$1"
+    if test ! -n "${ofile}"; then
+        echo >&2 "error: Please specify an output image."
+        return 1
+    fi
+    "${CONVERT}" \
+        -size 1920x1080 "${WALLPAPER_BACKGROUND}" \
+        -pointsize 64 -gravity northwest          \
+        -annotate +1500+0 "${WALLPAPER_TEXT}"     \
+        ${faceimg:+                               \
+              \( "${faceimg}" -resize 400x \)     \
+              -geometry +1500+80 -composite       \
+        }                                         \
+        "${ofile}"
+}
+create_wallpaper_show_variables() {
+    echo "WALLPAPER_SIZE       : ${WALLPAPER_SIZE}"
+    echo "WALLPAPER_BACKGROUND : ${WALLPAPER_BACKGROUND}"
+    echo "WALLPAPER_TEXT       : ${WALLPAPER_TEXT}"
+    echo "CONVERT              : ${CONVERT}"
+}
+create_wallpaper_calc_variables() {
+    WALLPAPER_SIZE="${WALLPAPER_SIZE:-1920x1080}"
+    WALLPAPER_BACKGROUND="${WALLPAPER_BACKGROUND:-xc:gray}"
+    WALLPAPER_TEXT="${WALLPAPER_TEXT:-$(uname -n)}"
+    CONVERT="C:/Msys64/mingw64/bin/convert.exe"
+}
+## -------------------------------------------------------------------
+create_wallpaper_calc_variables
+if test @"$(basename "$0")" = @"create-wallpaper";then
+    case "${1}" in
+        ''|-h|--help) sed -n 's/^ *#h: \{0,1\}//p' "$0";;
+        *)            create_wallpaper "$@"; exit 0    ;;
+    esac
+fi
