@@ -1,0 +1,34 @@
+#!/bin/sh -e
+##:
+#h: Usage: ssh-h-starticon { -V | SSH,... }
+#h:
+#h: Copy a start icon ~/.start.png to remote machines.
+#h:
+#h: Environment variables: SSH_H_STARTICON
+##:
+ssh_h_starticon() {
+    local ml
+    if test ! -f "${SSH_H_STARTICON}"; then
+        echo >&2 "error: ${SSH_H_STARTICON}: The file does not exist."
+        return 1
+    fi
+    if which ssh-h-list >/dev/null 2>&1; then
+        ml="$(ssh-h-list "$@")"
+    else
+        ml="$(echo "$*" | tr ',' ' ')"
+    fi
+    for m in ${ml}; do
+        echo "== ${m}"
+        scp "${SSH_H_STARTICON}" "${m}":".start.png"
+        echo "!! TODO !! Please set ~/.start.png as your start icon."
+    done
+}
+## -------------------------------------------------------------------
+SSH_H_STARTICON="${SSH_H_STARTICON:-${HOME}/.start.png}"
+if test @"${SCRNAME:-$(basename "$0")}" = @"ssh-h-starticon"; then
+    case "${1}" in
+        ''|-h|--help) sed -n 's/^ *#h: \{0,1\}//p' "$0";;
+        -*V*)         echo "SSH_H_STARTICON : ${SSH_H_STARTICON}"; exit 0;;
+        *)            ssh_h_starticon "$@"; exit 0;;
+    esac
+fi

@@ -44,7 +44,10 @@ create_wallpaper_calc_variables() {
     WALLPAPER_SIZE="${WALLPAPER_SIZE:-1920x1080}"
     WALLPAPER_BACKGROUND="${WALLPAPER_BACKGROUND:-xc:gray}"
     WALLPAPER_TEXT="${WALLPAPER_TEXT:-$(uname -n)}"
-    CONVERT="C:/Msys64/mingw64/bin/convert.exe"
+    case "$(uname -s)" in
+        Msys|MSYS|Windows_NT) CONVERT="C:/Msys64/mingw64/bin/convert.exe";;
+        *)                    CONVERT="convert";;
+    esac
 }
 ## -------------------------------------------------------------------
 create_wallpaper_calc_variables
