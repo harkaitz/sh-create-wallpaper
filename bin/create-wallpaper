@@ -42,7 +42,7 @@ create_wallpaper_show_variables() {
 }
 create_wallpaper_calc_variables() {
     WALLPAPER_SIZE="${WALLPAPER_SIZE:-1920x1080}"
-    WALLPAPER_BACKGROUND="${WALLPAPER_BACKGROUND:-xc:gray}"
+    WALLPAPER_BACKGROUND="${WALLPAPER_BACKGROUND:-xc:DarkSlateGray}"
     WALLPAPER_TEXT="${WALLPAPER_TEXT:-$(uname -n)}"
     case "$(uname -s)" in
         Msys|MSYS|Windows_NT) CONVERT="C:/Msys64/mingw64/bin/convert.exe";;

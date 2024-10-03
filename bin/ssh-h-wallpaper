@@ -27,6 +27,8 @@ ssh_h_wallpaper() {
         echo "== ${m}"
         if test -f "${d}/${m}.jpg"; then
             i="${d}/${m}.jpg"
+        elif test -f "${d}/${m}.png"; then
+            i="${d}/${m}.png"
         else
             i=""
         fi
