@@ -17,7 +17,5 @@ install-sh:
 	mkdir -p $(DESTDIR)$(PREFIX)/bin
 	cp bin/create-wallpaper $(DESTDIR)$(PREFIX)/bin
 	cp bin/ssh-h-wallpaper $(DESTDIR)$(PREFIX)/bin
-	cp bin/ssh-h-profile $(DESTDIR)$(PREFIX)/bin
 	cp bin/ssh-h-starticon $(DESTDIR)$(PREFIX)/bin
-	cp bin/ssh-h-motd $(DESTDIR)$(PREFIX)/bin
 ## -- BLOCK:sh --

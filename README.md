@@ -12,23 +12,6 @@ create-wallpaper
     wallpaper is gray with the HOSTNAME at top right and an optional
     image (logo) below.
 
-ssh-h-motd
-
-    Usage: ssh-h-motd { -V | [-e EXTRA][-c COMMAND][-p PS1] SSH,... }
-    
-    Update the ~/.motd file in remote machines by consulting the
-    $SSH_H_MOTD_DIRECTORY/SSH files. It will edit ~/.profile properly
-    so that the message is displayed properly.
-    
-    You can add an extra text below the MOTD with -e. The message can
-    be processed with COMMAND. You can set PS1 with -p.
-
-ssh-h-profile
-
-    Usage: ssh-h-profile [-u PROFILE_FILE][-c CODE] SSH,...
-    
-    Add/update a "-- PROFILE --" section in ~/.profile in remote machines.
-
 ssh-h-starticon
 
     Usage: ssh-h-starticon { -V | SSH,... }
